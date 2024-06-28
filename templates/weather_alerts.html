@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+{% block title %}Weather Alerts{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h1 class="text-center mb-4">Weather Alerts</h1>
+    <form action="{% url 'weather_alerts' %}" method="post">
+        {% csrf_token %}
+        <div class="input-group mb-3">
+            {{ form.city.label_tag }}
+            {{ form.city }}
+            <button class="btn btn-primary" type="submit">Get Alerts</button>
+        </div>
+    </form>
+    {% if alerts %}
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            {% for alert in alerts %}
+            <div class="alert alert-warning alert-item mb-3">
+                <h4>{{ alert.event }}</h4>
+                <p><strong>Start:</strong> {{ alert.start | date:"Y-m-d H:i:s" }}</p>
+                <p><strong>End:</strong> {{ alert.end | date:"Y-m-d H:i:s" }}</p>
+                <p>{{ alert.description }}</p>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

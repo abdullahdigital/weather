@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+{% block title %}Weather Forecast{% endblock %}
+{% block content %}
+<div class="container">
+    <h1 class="text-center mb-4">5-Day Weather Forecast</h1>
+    <form action="{% url 'forecast' %}" method="post">
+        {% csrf_token %}
+        <div class="input-group mb-3">
+            <input type="text" class="form-control" name="city" placeholder="Enter city name">
+            <button class="btn btn-primary" type="submit">Get Forecast</button>
+        </div>
+    </form>
+    {% if forecast_list %}
+    <div class="row justify-content-center">
+        {% for forecast in forecast_list %}
+        <div class="col-md-6">
+            <div class="card mb-4">
+                <div class="card-body">
+                    <h5 class="card-title">{{ forecast.date }} {{ forecast.time }}</h5>
+                    <p class="card-text">Temperature: {{ forecast.temp }}°C</p>
+                    <p class="card-text">Feels Like: {{ forecast.feels_like }}°C</p>
+                    <p class="card-text">Pressure: {{ forecast.pressure }} hPa</p>
+                    <p class="card-text">Humidity: {{ forecast.humidity }}%</p>
+                    <p class="card-text">Wind Speed: {{ forecast.wind_speed }} m/s</p>
+                    <p class="card-text">Wind Direction: {{ forecast.wind_direction }}°</p>
+                    <p class="card-text">Cloudiness: {{ forecast.cloudiness }}%</p>
+                    <p class="card-text">Description: {{ forecast.description }}</p>
+                    <img src="http://openweathermap.org/img/wn/{{ forecast.icon }}@2x.png" alt="Weather icon">
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <p>No forecast available for the selected city.</p>
+    {% endif %}
+</div>
+{% endblock %}

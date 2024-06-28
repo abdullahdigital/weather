@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+{% block title %}Air Quality{% endblock %}
+{% block content %}
+<div class="container">
+    <h1>Air Quality Index</h1>
+    <form action="{% url 'air_quality' %}" method="post">
+        {% csrf_token %}
+        <div class="input-group mb-3">
+            <input type="text" class="form-control" name="city" placeholder="Enter city name">
+            <button class="btn btn-primary" type="submit">Get Air Quality</button>
+        </div>
+    </form>
+    {% if air_quality_index %}
+    <div class="aqi-details">
+        <h2>Air Quality Index (AQI): {{ air_quality_index.aqi }}</h2>
+        <p>{% if air_quality_index.aqi == 1 %}
+            This indicates a good air quality level.
+        {% elif air_quality_index.aqi == 2 %}
+            This indicates a moderate air quality level.
+        {% elif air_quality_index.aqi == 3 %}
+            This indicates a poor air quality level.
+        {% elif air_quality_index.aqi == 4 %}
+            This indicates a very poor air quality level.
+        {% elif air_quality_index.aqi == 5 %}
+            This indicates a severe air quality level.
+        {% else %}
+            Air quality level information not available.
+        {% endif %}</p>
+        <ul>
+            <li>PM2.5: {{ air_quality_index.components.pm2_5 }} µg/m³</li>
+            <li>PM10: {{ air_quality_index.components.pm10 }} µg/m³</li>
+            <li>O3: {{ air_quality_index.components.o3 }} µg/m³</li>
+            <li>NO2: {{ air_quality_index.components.no2 }} µg/m³</li>
+            <li>SO2: {{ air_quality_index.components.so2 }} µg/m³</li>
+            <li>CO: {{ air_quality_index.components.co }} µg/m³</li>
+        </ul>
+        
+        <ul>
+            <li><strong>PM2.5 Standards:</strong> 0-12 µg/m³ (Good), 12.1-35.4 µg/m³ (Moderate), 35.5-55.4 µg/m³ (Unhealthy for Sensitive Groups), 55.5-150.4 µg/m³ (Unhealthy), 150.5-250.4 µg/m³ (Very Unhealthy), 250.5+ µg/m³ (Hazardous)</li>
+            <li><strong>PM10 Standards:</strong> 0-54 µg/m³ (Good), 54.1-154 µg/m³ (Moderate), 154.1-254 µg/m³ (Unhealthy for Sensitive Groups), 254.1-354 µg/m³ (Unhealthy), 354.1-424 µg/m³ (Very Unhealthy), 424.1+ µg/m³ (Hazardous)</li>
+            <li><strong>O3 Standards:</strong> 0-54 µg/m³ (Good), 54.1-70 µg/m³ (Moderate), 70.1-85 µg/m³ (Unhealthy for Sensitive Groups), 85.1-105 µg/m³ (Unhealthy), 105.1-200 µg/m³ (Very Unhealthy), 200.1+ µg/m³ (Hazardous)</li>
+            <li><strong>NO2 Standards:</strong> 0-53 µg/m³ (Good), 53.1-100 µg/m³ (Moderate), 100.1-360 µg/m³ (Unhealthy for Sensitive Groups), 360.1-649 µg/m³ (Unhealthy), 649.1-1249 µg/m³ (Very Unhealthy), 1249.1+ µg/m³ (Hazardous)</li>
+            <li><strong>SO2 Standards:</strong> 0-35 µg/m³ (Good), 35.1-75 µg/m³ (Moderate), 75.1-185 µg/m³ (Unhealthy for Sensitive Groups), 185.1-304 µg/m³ (Unhealthy), 304.1-604 µg/m³ (Very Unhealthy), 604.1+ µg/m³ (Hazardous)</li>
+            <li><strong>CO Standards:</strong> 0-4.4 µg/m³ (Good), 4.5-9.4 µg/m³ (Moderate), 9.5-12.4 µg/m³ (Unhealthy for Sensitive Groups), 12.5-15.4 µg/m³ (Unhealthy), 15.5-30.4 µg/m³ (Very Unhealthy), 30.5+ µg/m³ (Hazardous)</li>
+        </ul>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}
